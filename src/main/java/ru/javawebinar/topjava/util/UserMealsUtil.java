@@ -7,7 +7,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * GKislin
@@ -29,32 +33,21 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExceed> getFilteredMealsWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        List<UserMealWithExceed> mealsWithExceed = new ArrayList<>();
-
+        List<UserMealWithExceed> mealsWithExceed;
+        Map<LocalDate, Integer> calCounters;
         // Count calories consumed per day
-        Map<LocalDate, Integer> calCounters = new HashMap<>();
-        mealList.forEach(meal -> {
-            LocalDate mealDate = meal.getDateTime().toLocalDate();
-            int counter = calCounters.containsKey(mealDate) ? calCounters.get(mealDate) : 0;
-            counter += meal.getCalories();
-            calCounters.put(mealDate, counter);
-        });
+        calCounters = mealList.stream().collect(Collectors.toMap(
+                meal -> meal.getDateTime().toLocalDate(),
+                UserMeal::getCalories,
+                (a, b) -> a + b)
+        );
 
-        mealList.stream()
+        Predicate<UserMeal> exceeded = (m) -> calCounters.get(m.getDateTime().toLocalDate()) > caloriesPerDay;
+        mealsWithExceed = mealList.stream()
                 .filter(meal -> TimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime))
-                .forEach(meal -> {
-                    boolean hasExceeded = calCounters.get(meal.getDateTime().toLocalDate()) > caloriesPerDay;
+                .map(meal -> new UserMealWithExceed(meal, exceeded.test(meal)))
+                .collect(Collectors.toList());
 
-                    // OK, next line could instead have:
-                    // new UserMealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), isExceed)
-                    // ...but it's much more convenient with a dedicated constructor, isn't it?
-                    mealsWithExceed.add(new UserMealWithExceed(meal, hasExceeded));
-                });
-
-        // Test
-        System.out.println(calCounters);
-        mealsWithExceed.forEach(System.out::println);
-        // endTest
         return mealsWithExceed;
     }
 }
