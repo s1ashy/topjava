@@ -22,10 +22,24 @@ public class UserMealWithExceed {
         this.exceed = exceed;
     }
 
-    public UserMealWithExceed(UserMeal meal, boolean exceed) {
+    private UserMealWithExceed(UserMeal meal, boolean exceed) {
         this.dateTime = meal.getDateTime();
         this.description = meal.getDescription();
         this.calories = meal.getCalories();
         this.exceed = exceed;
+    }
+
+    @Override
+    public String toString() {
+        return "UserMealWithExceed{" +
+                "dateTime=" + dateTime +
+                ", description='" + description + '\'' +
+                ", calories=" + calories +
+                ", exceed=" + exceed +
+                '}';
+    }
+
+    public static UserMealWithExceed get(UserMeal meal, boolean exceeded) {
+        return new UserMealWithExceed(meal, exceeded);
     }
 }

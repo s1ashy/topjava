@@ -10,7 +10,6 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -33,21 +32,16 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExceed> getFilteredMealsWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        List<UserMealWithExceed> mealsWithExceed;
-        Map<LocalDate, Integer> calCounters;
+
         // Count calories consumed per day
-        calCounters = mealList.stream().collect(Collectors.toMap(
-                meal -> meal.getDateTime().toLocalDate(),
-                UserMeal::getCalories,
-                (a, b) -> a + b
+        Map<LocalDate, Integer> calCounters = mealList.stream().collect(Collectors.groupingBy(
+                UserMeal::getDate,
+                Collectors.summingInt(UserMeal::getCalories)
         ));
 
-        Predicate<UserMeal> exceeded = (m) -> calCounters.get(m.getDateTime().toLocalDate()) > caloriesPerDay;
-        mealsWithExceed = mealList.stream()
-                .filter(meal -> TimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime))
-                .map(meal -> new UserMealWithExceed(meal, exceeded.test(meal)))
+        return mealList.stream()
+                .filter(meal -> TimeUtil.isBetween(meal.getTime(), startTime, endTime))
+                .map(meal -> UserMealWithExceed.get(meal, calCounters.get(meal.getDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
-
-        return mealsWithExceed;
     }
 }
