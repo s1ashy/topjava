@@ -39,8 +39,8 @@ public class UserMealsUtil {
         calCounters = mealList.stream().collect(Collectors.toMap(
                 meal -> meal.getDateTime().toLocalDate(),
                 UserMeal::getCalories,
-                (a, b) -> a + b)
-        );
+                (a, b) -> a + b
+        ));
 
         Predicate<UserMeal> exceeded = (m) -> calCounters.get(m.getDateTime().toLocalDate()) > caloriesPerDay;
         mealsWithExceed = mealList.stream()
