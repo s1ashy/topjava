@@ -10,52 +10,56 @@
         <servlet-class>ru.javawebinar.topjava.web.UserServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>userServlet</servlet-name>
+        <url-pattern>/users</url-pattern>
+    </servlet-mapping>
+
     <servlet>
-        <servlet-name>mealServlet</servlet-name>
-        <servlet-class>ru.javawebinar.topjava.web.MealServlet</servlet-class>
+        <servlet-name>mealListServlet</servlet-name>
+        <servlet-class>ru.javawebinar.topjava.web.MealListServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>mealListServlet</servlet-name>
+        <url-pattern>/meals/list</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>editMealServlet</servlet-name>
         <servlet-class>ru.javawebinar.topjava.web.EditMealServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>editMealServlet</servlet-name>
+        <url-pattern>/meals/edit</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>addMealServlet</servlet-name>
         <servlet-class>ru.javawebinar.topjava.web.AddMealServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>addMealServlet</servlet-name>
+        <url-pattern>/meals/new</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>deleteMealServlet</servlet-name>
         <servlet-class>ru.javawebinar.topjava.web.DeleteMealServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteMealServlet</servlet-name>
+        <url-pattern>/meals/delete</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>resetMealServlet</servlet-name>
         <servlet-class>ru.javawebinar.topjava.web.ResetMealServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
-
-    <servlet-mapping>
-        <servlet-name>userServlet</servlet-name>
-        <url-pattern>/users</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>mealServlet</servlet-name>
-        <url-pattern>/meals/list</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>addMealServlet</servlet-name>
-        <url-pattern>/meals/new</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>editMealServlet</servlet-name>
-        <url-pattern>/meals/edit</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>deleteMealServlet</servlet-name>
-        <url-pattern>/meals/delete</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>resetMealServlet</servlet-name>
         <url-pattern>/meals/reset</url-pattern>

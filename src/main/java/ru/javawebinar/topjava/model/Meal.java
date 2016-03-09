@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * GKislin
  * 11.01.2015.
  */
-public class UserMeal {
+public class Meal {
     protected LocalDateTime dateTime;
 
     protected String description;
@@ -16,7 +16,7 @@ public class UserMeal {
     protected long id;
 
 
-    public UserMeal(LocalDateTime dateTime, String description, int calories) {
+    public Meal(LocalDateTime dateTime, String description, int calories) {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
@@ -50,17 +50,11 @@ public class UserMeal {
         this.calories = calories;
     }
 
+    /**
+     * Should be used only by DAO
+     * @param id primary key
+     */
     public void setId(long id) {
         this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "UserMeal{" +
-                "dateTime=" + dateTime +
-                ", description='" + description + '\'' +
-                ", calories=" + calories +
-                ", id=" + id +
-                '}';
     }
 }

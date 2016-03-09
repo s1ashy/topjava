@@ -1,5 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="f" uri="http://example.com/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <html>
 <head>
     <title>Meal Form</title>
@@ -10,14 +13,18 @@
     </style>
 </head>
 <body>
+
+<fmt:setBundle basename="application"/>
+<fmt:message var="dateFormat" key="dateTimeFormat"/>
+<fmt:setBundle basename="messages"/>
 <h2>Meal Form</h2>
 <form method="post" action="${action}">
     <input type="hidden" id="id" name="id" value="${meal.id}">
     <table>
         <tr>
             <td><label for="dateTime">DateTime: </label></td>
-            <td><input type="text" id="dateTime" name="dateTime" value="${meal.dateTime}"/></td>
-            <td class="tip">format: 2007-12-03T10:15:30</td>
+            <td><input type="text" id="dateTime" name="dateTime" value="${f:format(meal.dateTime)}"/></td>
+            <td class="tip">format: ${dateFormat}</td>
         </tr>
         <tr>
             <td><label for="description">Description: </label></td>
@@ -26,7 +33,7 @@
         <tr>
             <td><label for="calories">Calories: </label></td>
             <td><input type=text id="calories" name="calories" value="${meal.calories}"/></td>
-            <td class="tip">integer</td>
+            <td class="tip"><fmt:message key="mustBeInteger"/></td>
         </tr>
         <tr>
             <td colspan="3">

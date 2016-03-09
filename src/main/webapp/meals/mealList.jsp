@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="f" uri="http://example.com/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -30,7 +31,7 @@
     <c:forEach items="${meals}" var="meal">
         <tr class="${meal.exceed ? "exceeded" : "normal"}">
             <td>${meal.id}</td>
-            <td>${meal.dateTime}</td>
+            <td>${f:format(meal.dateTime)}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
             <td><a href="edit?id=${meal.id}">Edit</a></td>

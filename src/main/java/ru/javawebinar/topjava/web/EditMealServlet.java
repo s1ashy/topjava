@@ -1,43 +1,36 @@
 package ru.javawebinar.topjava.web;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.javawebinar.topjava.model.UserMeal;
-import ru.javawebinar.topjava.service.UserMealService;
-import ru.javawebinar.topjava.service.UserMealServiceImpl;
+import ru.javawebinar.topjava.model.Meal;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
-public class EditMealServlet extends HttpServlet {
-    private static final Logger LOG = LoggerFactory.getLogger(EditMealServlet.class);
-    private static UserMealService mealService = UserMealServiceImpl.getInstance();
+public class EditMealServlet extends MealFormServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("forward to edit");
-
-        final long id = Integer.parseInt(request.getParameter("id"));
-        request.setAttribute("meal", mealService.findMealById(id));
-        request.setAttribute("action", "edit");
-        request.getRequestDispatcher("mealForm.jsp").forward(request, response);
+    public void init() throws ServletException {
+        actionAttr = "edit";
+        LoggedAction = "updated";
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        long id = Long.parseLong(request.getParameter("id"));
-        UserMeal meal = mealService.findMealById(id);
+    protected void getActions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        final long id = Integer.parseInt(request.getParameter("id"));
+        request.setAttribute("meal", mealService.findById(id));
+    }
 
-        meal.setDateTime(LocalDateTime.parse(request.getParameter("dateTime")));
-        meal.setDescription(request.getParameter("description"));
-        meal.setCalories(Integer.parseInt(request.getParameter("calories")));
-        mealService.updateMeal(meal);
-        LOG.debug("updated: " + meal);
-        response.sendRedirect("list");
+    @Override
+    protected Meal postActions(HttpServletRequest request, HttpServletResponse response) {
+        long id = Long.parseLong(request.getParameter("id"));
+        Meal meal = mealService.findById(id);
+
+        meal.setDateTime(dateTime);
+        meal.setDescription(description);
+        meal.setCalories(calories);
+
+        mealService.update(meal);
+        return meal;
     }
 }
