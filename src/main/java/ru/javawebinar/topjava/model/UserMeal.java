@@ -15,6 +15,8 @@ public class UserMeal {
 
     private final int calories;
 
+    private Integer ownerId;
+
     public UserMeal(LocalDateTime dateTime, String description, int calories) {
         this(null, dateTime, description, calories);
     }
@@ -50,6 +52,14 @@ public class UserMeal {
         return id == null;
     }
 
+    public Integer getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
+    }
+
     @Override
     public String toString() {
         return "UserMeal{" +
@@ -57,6 +67,7 @@ public class UserMeal {
                 ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
+                ", ownerId=" + ownerId +
                 '}';
     }
 }
