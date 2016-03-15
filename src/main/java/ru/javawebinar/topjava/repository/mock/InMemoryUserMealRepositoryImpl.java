@@ -1,14 +1,13 @@
 package ru.javawebinar.topjava.repository.mock;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
+import ru.javawebinar.topjava.util.TimeUtil;
 import ru.javawebinar.topjava.util.UserMealsUtil;
 import ru.javawebinar.topjava.util.UserUtil;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,7 +23,6 @@ import java.util.stream.Collectors;
 public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
     private Map<Integer, UserMeal> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
-    private static final Logger LOG = LoggerFactory.getLogger(InMemoryUserMealRepositoryImpl.class);
 
     {
         UserMealsUtil.MEAL_LIST.forEach(
@@ -46,10 +44,10 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
 
     @Override
     public boolean delete(int mealId, int userId) {
-        try {
-            return isUserOwner(mealId, userId) && repository.remove(mealId) != null;
-        } catch (Exception e) {
-            LOG.warn(e.getMessage());
+        if (isUserOwner(mealId, userId)) {
+            repository.remove(mealId);
+            return true;
+        } else {
             return false;
         }
     }
@@ -72,7 +70,15 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<UserMeal> getFiltered(LocalDate from, LocalDate to, int userId) {
+        return getAll(userId)
+                .stream()
+                .filter(meal -> TimeUtil.isBetween(meal.getDateTime().toLocalDate(), from, to))
+                .collect(Collectors.toList());
+    }
+
     private boolean isUserOwner(int mealId, int userId) {
-        return userId == repository.get(mealId).getOwnerId();
+        return repository.containsKey(mealId) && userId == repository.get(mealId).getOwnerId();
     }
 }

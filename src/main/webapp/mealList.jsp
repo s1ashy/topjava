@@ -44,14 +44,22 @@
     <form method="post" action="meals">
         <div>
             <dl>
-                <dt>From Date:</dt>
-                <dd><input type="datetime-local" value="${fromDateTime}" name="fromDateTime"></dd>
+                <dt>From date:</dt>
+                <dd><input type="date" value="${fromDate}" name="fromDate"></dd>
+            </dl>
+            <dl>
+                <dt>From time:</dt>
+                <dd><input type="time" value="${fromTime}" name="fromTime"></dd>
             </dl>
         </div>
         <div>
             <dl>
-                <dt>To Date:</dt>
-                <dd><input type="datetime-local" value="${toDateTime}" name="toDateTime"></dd>
+                <dt>To date:</dt>
+                <dd><input type="date" value="${toDate}" name="toDate"></dd>
+            </dl>
+            <dl>
+                <dt>To time:</dt>
+                <dd><input type="time" value="${toTime}" name="toTime"></dd>
             </dl>
         </div>
         <button type="submit" name="filter" style="display: inline">Filter</button>

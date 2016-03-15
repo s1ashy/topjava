@@ -15,7 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 /**
@@ -48,16 +50,28 @@ public class MealServlet extends HttpServlet {
 
         if (request.getParameter("filter") != null) {
             LOG.debug("clicked filter");
-            StringBuilder urlParams = new StringBuilder();
-            String fromTime = request.getParameter("fromDateTime");
-            if (!fromTime.isEmpty()) {
-                urlParams.append("&fromDateTime=").append(fromTime);}
 
-            String toTime = request.getParameter("toDateTime");
-            if (!toTime.isEmpty()) {
-                urlParams.append("&toDateTime=").append(toTime);
-            }
-            response.sendRedirect("meals?action=filter" + urlParams);
+            LocalDate fromDate = request.getParameter("fromDate").isEmpty() ?
+                    LocalDate.MIN : LocalDate.parse(request.getParameter("fromDate"));
+
+            LocalDate toDate = request.getParameter("toDate").isEmpty() ?
+                    LocalDate.MAX : LocalDate.parse(request.getParameter("toDate"));
+            
+            LocalTime fromTime = request.getParameter("fromTime").isEmpty() ?
+                    LocalTime.MIN : LocalTime.parse(request.getParameter("fromTime"));
+            
+            LocalTime toTime = request.getParameter("toTime").isEmpty() ?
+                    LocalTime.MAX : LocalTime.parse(request.getParameter("toTime"));
+
+            LOG.debug("Date filter: {} - {}", fromDate, toDate);
+            LOG.debug("Time filter: {} - {}", fromTime, toTime);
+
+            request.setAttribute("showResetLink", true);
+            request.setAttribute("mealList", controller.getFiltered(fromDate, fromTime, toDate, toTime));
+            request.setAttribute("userList", UserUtil.USER_LIST);
+            request.setAttribute("loggedUserId", LoggedUser.id());
+
+            request.getRequestDispatcher("/mealList.jsp").forward(request, response);
             return;
         }
 
@@ -83,29 +97,6 @@ public class MealServlet extends HttpServlet {
         if (action == null) {
             LOG.info("List all");
             request.setAttribute("mealList", controller.getAll());
-            request.getRequestDispatcher("/mealList.jsp").forward(request, response);
-        } else if (action.equals("filter")) {
-            LOG.info("Filter");
-
-            LocalDateTime fromDateTime = LocalDateTime.MIN;
-            try {
-                fromDateTime = LocalDateTime.parse(request.getParameter("fromDateTime"));
-            } catch (Exception e) {
-                LOG.debug(request.getParameter("fromDateTime"));
-                LOG.debug(e.getMessage());
-            }
-            request.setAttribute("fromDateTime", fromDateTime);
-            request.setAttribute("showResetLink", true);
-            LocalDateTime toDateTime = LocalDateTime.MAX;
-            try {
-                toDateTime = LocalDateTime.parse(request.getParameter("toDateTime"));
-            } catch (Exception e) {
-                LOG.debug(request.getParameter("toDateTime"));
-                LOG.debug(e.getMessage());
-            }
-            request.setAttribute("toDateTime", toDateTime);
-
-            request.setAttribute("mealList", controller.getFiltered(fromDateTime, toDateTime));
             request.getRequestDispatcher("/mealList.jsp").forward(request, response);
         } else if (action.equals("delete")) {
             int id = getId(request);

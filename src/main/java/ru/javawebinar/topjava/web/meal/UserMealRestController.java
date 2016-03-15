@@ -9,7 +9,8 @@ import ru.javawebinar.topjava.service.UserMealService;
 import ru.javawebinar.topjava.util.TimeUtil;
 import ru.javawebinar.topjava.util.UserMealsUtil;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,9 +28,11 @@ public class UserMealRestController {
         return UserMealsUtil.getWithExceeded(service.getAll(LoggedUser.id()), LoggedUser.getCaloriesPerDay());
     }
 
-    public List<UserMealWithExceed> getFiltered(LocalDateTime from, LocalDateTime to) {
-        return getAll().stream()
-                .filter(m -> TimeUtil.isBetween(m.getDateTime(), from, to))
+    public List<UserMealWithExceed> getFiltered(LocalDate fromDate, LocalTime fromTime, LocalDate toDate, LocalTime toTime) {
+        List<UserMeal> filteredMeals = service.getFiltered(fromDate, toDate, LoggedUser.id());
+        return UserMealsUtil.getWithExceeded(filteredMeals, LoggedUser.getCaloriesPerDay())
+                .stream()
+                .filter(meal -> TimeUtil.isBetween(meal.getDateTime().toLocalTime(), fromTime, toTime))
                 .collect(Collectors.toList());
     }
 
