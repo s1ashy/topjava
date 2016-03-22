@@ -43,13 +43,11 @@ public class UserMealServiceTest {
 
     @Test
     public void get() throws Exception {
-        for (UserMeal testMeal : testUserMeals) {
-            MATCHER.assertEquals(testMeal, service.get(testMeal.getId(), USER_ID));
-        }
+        UserMeal testMeal = testUserMeals.get(0);
+        MATCHER.assertEquals(testMeal, service.get(testMeal.getId(), USER_ID));
 
-        for (UserMeal testMeal : MealTestData.testAdminMeals) {
-            MATCHER.assertEquals(testMeal, service.get(testMeal.getId(), UserTestData.ADMIN_ID));
-        }
+        testMeal = testAdminMeals.get(0);
+        MATCHER.assertEquals(testMeal, service.get(testMeal.getId(), UserTestData.ADMIN_ID));
     }
 
     @Test(expected = NotFoundException.class)
@@ -68,9 +66,7 @@ public class UserMealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void deleteOtherUserMeal() throws Exception {
-        UserMeal removed = testUserMeals.remove(4);
-        service.delete(removed.getId(), ADMIN_ID);
-        MATCHER.assertCollectionEquals(testUserMeals, service.getAll(USER_ID));
+        service.delete(testUserMeals.get(0).getId(), ADMIN_ID);
     }
 
     @Test
