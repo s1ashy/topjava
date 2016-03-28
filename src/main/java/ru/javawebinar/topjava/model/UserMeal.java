@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
  * 11.01.2015.
  */
 @NamedQueries({
-        @NamedQuery(name = UserMeal.ALL_SORTED, query = "SELECT m FROM UserMeal m WHERE m.user.id=:userId ORDER BY dateTime DESC"),
-        @NamedQuery(name = UserMeal.BY_ID, query = "SELECT m FROM UserMeal m WHERE m.id=:id AND m.user.id=:userId ORDER BY dateTime DESC"),
+        @NamedQuery(name = UserMeal.ALL_SORTED, query = "SELECT m FROM UserMeal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC"),
+        @NamedQuery(name = UserMeal.BY_ID, query = "SELECT m FROM UserMeal m WHERE m.id=:id AND m.user.id=:userId ORDER BY m.dateTime DESC"),
         @NamedQuery(name = UserMeal.DELETE, query = "DELETE FROM UserMeal m WHERE m.id=:id AND m.user.id=:userId"),
-        @NamedQuery(name = UserMeal.UPDATE, query = "UPDATE UserMeal m SET calories=:calories, dateTime=:dateTime, description=:description WHERE m.id=:id AND m.user.id=:userId"),
-        @NamedQuery(name = UserMeal.BETWEEN, query = "SELECT m FROM UserMeal m WHERE m.user.id=:userId AND m.dateTime BETWEEN :startDate AND :endDate ORDER BY dateTime DESC"),
+        @NamedQuery(name = UserMeal.UPDATE, query = "UPDATE UserMeal m SET m.calories=:calories, m.dateTime=:dateTime, m.description=:description WHERE m.id=:id AND m.user.id=:userId"),
+        @NamedQuery(name = UserMeal.BETWEEN, query = "SELECT m FROM UserMeal m WHERE m.user.id=:userId AND m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC"),
 })
 @Entity
 @Table(name = "meals")
