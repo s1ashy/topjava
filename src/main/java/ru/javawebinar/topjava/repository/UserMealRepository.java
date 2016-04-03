@@ -19,6 +19,10 @@ public interface UserMealRepository {
     // null if meal do not belong to userId
     UserMeal get(int id, int userId);
 
+    default UserMeal getEagerly(int mealId) {
+        throw new IllegalStateException("Method is not implemented");
+    }
+
     // ORDERED dateTime
     Collection<UserMeal> getAll(int userId);
 

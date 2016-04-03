@@ -4,14 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
+import ru.javawebinar.topjava.to.UserWithMeals;
 import ru.javawebinar.topjava.util.exception.ExceptionUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.util.Collection;
-import java.util.Objects;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * GKislin
@@ -35,6 +36,14 @@ public class UserServiceImpl implements UserService {
 
     public User get(int id) throws NotFoundException {
         return ExceptionUtil.check(repository.get(id), id);
+    }
+
+    @Override
+    @Transactional
+    public UserWithMeals getWithMeals(int userId) {
+        User user = repository.get(userId);
+        ExceptionUtil.check(user, "user", "id=" + userId);
+        return new UserWithMeals(user, repository.getMealsByUserId(userId));
     }
 
     public User getByEmail(String email) throws NotFoundException {

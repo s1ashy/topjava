@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
 import ru.javawebinar.topjava.util.exception.ExceptionUtil;
@@ -22,6 +23,12 @@ public class UserMealServiceImpl implements UserMealService {
     @Override
     public UserMeal get(int id, int userId) {
         return ExceptionUtil.check(repository.get(id, userId), id);
+    }
+
+    @Override
+    @Transactional
+    public UserMeal getEagerly(int mealId) {
+        return ExceptionUtil.check(repository.getEagerly(mealId), "meal", "id=" + mealId);
     }
 
     @Override

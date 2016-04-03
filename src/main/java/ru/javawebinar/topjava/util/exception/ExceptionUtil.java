@@ -22,9 +22,18 @@ public class ExceptionUtil {
         return object;
     }
 
+    public static <T> T check(T object, String entityName, String msg) {
+        check(object != null, entityName, msg);
+        return object;
+    }
+
     public static void check(boolean found, String msg) {
+        check(found, "entity", msg);
+    }
+
+    public static void check(boolean found, String entityName, String msg) {
         if (!found) {
-            throw new NotFoundException("Not found entity with " + msg);
+            throw new NotFoundException("Not found " + entityName + " with " + msg);
         }
     }
 }

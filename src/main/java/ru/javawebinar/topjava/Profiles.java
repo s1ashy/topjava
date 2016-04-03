@@ -9,5 +9,10 @@ public class Profiles {
             POSTGRES = "postgres",
             HSQLDB = "hsqldb",
             JDBC = "jdbc",
-            JPA = "jpa";
+            JPA = "jpa",
+            DATAJPA = "datajpa";
+
+    // Set active spring profiles here
+    public static final String ACTIVE_RDBMS_PROFILE = POSTGRES;
+    public static final String ACTIVE_PERSISTENCE_PROFILE = DATAJPA;
 }
