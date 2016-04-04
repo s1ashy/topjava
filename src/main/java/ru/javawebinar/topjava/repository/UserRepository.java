@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.model.UserMeal;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ public interface UserRepository {
 
     List<User> getAll();
 
-    default List<UserMeal> getMealsByUserId(int userId) {
+    default User getEagerly(int id) {
         throw new IllegalStateException("Method is not implemented");
     }
 }

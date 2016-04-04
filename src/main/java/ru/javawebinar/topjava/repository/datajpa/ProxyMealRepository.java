@@ -17,9 +17,20 @@ public interface ProxyMealRepository extends JpaRepository<UserMeal, Integer> {
     @Query("SELECT m FROM UserMeal m WHERE m.user.id=?1")
     List<UserMeal> findAll(Integer userId, Sort sort);
 
+    @SuppressWarnings("unchecked")
     @Override
     @Transactional
     UserMeal save(UserMeal meal);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE UserMeal m SET m.dateTime=:dateTime, m.description=:description, " +
+            "m.calories=:calories WHERE m.id=:mealId AND m.user.id=:userId")
+    int update(@Param("mealId") int mealId,
+               @Param("dateTime") LocalDateTime dateTime,
+               @Param("description") String description,
+               @Param("calories") int calories,
+               @Param("userId") int userId);
 
     @Transactional
     @Modifying
@@ -36,4 +47,7 @@ public interface ProxyMealRepository extends JpaRepository<UserMeal, Integer> {
                               @Param("endDate") LocalDateTime endDate,
                               @Param("userId") int userId,
                               Sort sortDatetimeDesc);
+
+    @Query("SELECT m FROM UserMeal m JOIN FETCH m.user WHERE m.id=?1")
+    UserMeal getEagerly(int mealId);
 }

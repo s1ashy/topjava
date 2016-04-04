@@ -1,10 +1,6 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
-import org.hibernate.Hibernate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
@@ -21,9 +17,7 @@ import java.util.List;
  * 27.03.2015.
  */
 @Repository
-@Profile("datajpa")
 public class DataJpaUserMealRepositoryImpl implements UserMealRepository{
-    private static final Logger LOG = LoggerFactory.getLogger(DataJpaUserMealRepositoryImpl.class);
     private static final Sort SORT_DATETIME_DESC = new Sort(Sort.Direction.DESC, "dateTime");
 
     @Autowired
@@ -40,7 +34,8 @@ public class DataJpaUserMealRepositoryImpl implements UserMealRepository{
         if (meal.isNew()) {
             return proxy.save(meal);
         } else {
-            return get(meal.getId(), userId) == null ? null : proxy.save(meal);
+            return proxy.update(meal.getId(), meal.getDateTime(), meal.getDescription(),
+                    meal.getCalories(), userId) == 0 ? null : meal;
         }
     }
 
@@ -56,12 +51,7 @@ public class DataJpaUserMealRepositoryImpl implements UserMealRepository{
 
     @Override
     public UserMeal getEagerly(int mealId) {
-        UserMeal meal = proxy.findOne(mealId);
-        if (meal == null) {
-            return null;
-        }
-        Hibernate.initialize(meal.getUser());
-        return meal;
+        return proxy.getEagerly(mealId);
     }
 
     @Override

@@ -1,15 +1,15 @@
 package ru.javawebinar.topjava.model;
 
-import ru.javawebinar.topjava.util.UserMealsUtil;
-
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import ru.javawebinar.topjava.util.UserMealsUtil;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -43,7 +43,7 @@ public class User extends NamedEntity {
     protected boolean enabled = true;
 
     @Column(name = "registered", columnDefinition = "timestamp default now()")
-    protected Date registered = new Date();
+    private Date registered = new Date();
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -54,6 +54,10 @@ public class User extends NamedEntity {
     @Column(name = "calories_per_day", columnDefinition = "default 2000")
     @Digits(fraction = 0, integer = 4)
     protected int caloriesPerDay = UserMealsUtil.DEFAULT_CALORIES_PER_DAY;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OrderBy(value = "dateTime DESC")
+    protected List<UserMeal> meals;
 
     public User() {
     }
@@ -66,6 +70,11 @@ public class User extends NamedEntity {
         this(id, name, email, password, UserMealsUtil.DEFAULT_CALORIES_PER_DAY, true, EnumSet.of(role, roles));
     }
 
+    public User(Integer id, String name, String email, String password, List<UserMeal> meals, Role role, Role... roles) {
+        this(id, name, email, password, UserMealsUtil.DEFAULT_CALORIES_PER_DAY, true, EnumSet.of(role, roles));
+        this.meals = meals;
+    }
+
     public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled, Set<Role> roles) {
         super(id, name);
         this.email = email;
@@ -73,6 +82,14 @@ public class User extends NamedEntity {
         this.caloriesPerDay = caloriesPerDay;
         this.enabled = enabled;
         this.roles = roles;
+    }
+
+    public List<UserMeal> getMeals() {
+        return meals;
+    }
+
+    public void setMeals(List<UserMeal> meals) {
+        this.meals = meals;
     }
 
     public String getEmail() {
