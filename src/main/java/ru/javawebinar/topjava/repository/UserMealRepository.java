@@ -19,7 +19,7 @@ public interface UserMealRepository {
     // null if meal do not belong to userId
     UserMeal get(int id, int userId);
 
-    default UserMeal getEagerly(int mealId) {
+    default UserMeal getWithUser(int mealId, int userId) {
         throw new IllegalStateException("Method is not implemented");
     }
 

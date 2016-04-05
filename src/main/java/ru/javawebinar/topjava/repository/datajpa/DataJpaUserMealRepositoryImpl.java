@@ -50,8 +50,8 @@ public class DataJpaUserMealRepositoryImpl implements UserMealRepository{
     }
 
     @Override
-    public UserMeal getEagerly(int mealId) {
-        return proxy.getEagerly(mealId);
+    public UserMeal getWithUser(int mealId, int userId) {
+        return proxy.getWithUser(mealId, userId);
     }
 
     @Override

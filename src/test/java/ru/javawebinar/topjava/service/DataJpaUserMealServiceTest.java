@@ -11,14 +11,15 @@ import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import static ru.javawebinar.topjava.MealTestData.*;
-import static ru.javawebinar.topjava.UserTestData.ADMIN;
+import static ru.javawebinar.topjava.MealTestData.MATCHER;
+import static ru.javawebinar.topjava.UserTestData.*;
 
 @ActiveProfiles(Profiles.DATAJPA)
 public class DataJpaUserMealServiceTest extends UserMealServiceTest {
 
     @Test
-    public void testGetEagerly() throws Exception {
-        UserMeal meal = service.getEagerly(ADMIN_MEAL_ID);
+    public void testGetWithUser() throws Exception {
+        UserMeal meal = service.getWithUser(ADMIN_MEAL_ID, ADMIN_ID);
         User mealUser = meal.getUser();
         Assert.assertTrue(Hibernate.isInitialized(meal.getUser()));
 
@@ -31,8 +32,8 @@ public class DataJpaUserMealServiceTest extends UserMealServiceTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void testGetEagerlyNotFound() throws Exception {
-        service.getEagerly(99);
+    public void testGetWithUserNotFound() throws Exception {
+        service.getWithUser(ADMIN_MEAL_ID, USER_ID);
     }
 
 }

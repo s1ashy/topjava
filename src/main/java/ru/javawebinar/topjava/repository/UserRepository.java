@@ -22,7 +22,7 @@ public interface UserRepository {
 
     List<User> getAll();
 
-    default User getEagerly(int id) {
+    default User getWithMeals(int id) {
         throw new IllegalStateException("Method is not implemented");
     }
 }

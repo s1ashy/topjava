@@ -37,5 +37,5 @@ public interface ProxyUserRepository extends JpaRepository<User, Integer> {
     User getByEmail(String email);
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.meals WHERE u.id=?1")
-    User getEagerly(int id);
+    User getWithMeals(int id);
 }

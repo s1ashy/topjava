@@ -48,6 +48,6 @@ public interface ProxyMealRepository extends JpaRepository<UserMeal, Integer> {
                               @Param("userId") int userId,
                               Sort sortDatetimeDesc);
 
-    @Query("SELECT m FROM UserMeal m JOIN FETCH m.user WHERE m.id=?1")
-    UserMeal getEagerly(int mealId);
+    @Query("SELECT m FROM UserMeal m JOIN FETCH m.user WHERE m.id=?1 AND m.user.id=?2")
+    UserMeal getWithUser(int mealId, int userId);
 }

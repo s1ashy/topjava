@@ -18,7 +18,7 @@ public interface UserService {
 
     User get(int id) throws NotFoundException;
 
-    User getEagerly(int userId) throws NotFoundException;
+    User getWithMeals(int userId) throws NotFoundException;
 
     User getByEmail(String email) throws NotFoundException;
 

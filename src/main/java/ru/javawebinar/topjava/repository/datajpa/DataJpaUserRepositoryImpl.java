@@ -46,7 +46,7 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getEagerly(int id) {
-        return proxy.getEagerly(id);
+    public User getWithMeals(int id) {
+        return proxy.getWithMeals(id);
     }
 }

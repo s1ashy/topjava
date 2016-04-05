@@ -25,8 +25,8 @@ public class UserMealServiceImpl implements UserMealService {
     }
 
     @Override
-    public UserMeal getEagerly(int mealId) {
-        return ExceptionUtil.check(repository.getEagerly(mealId), "meal", "id=" + mealId);
+    public UserMeal getWithUser(int mealId, int userId) {
+        return ExceptionUtil.check(repository.getWithUser(mealId, userId), "meal", "id=" + mealId);
     }
 
     @Override

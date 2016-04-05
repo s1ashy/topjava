@@ -16,8 +16,8 @@ import static ru.javawebinar.topjava.UserTestData.*;
 public class DataJpaUserServiceTest extends UserServiceTest {
 
     @Test
-    public void testGetEagerly() throws Exception {
-        User fetchedUser = service.getEagerly(USER_ID);
+    public void testGetWithMeals() throws Exception {
+        User fetchedUser = service.getWithMeals(USER_ID);
         Assert.assertTrue(Hibernate.isInitialized(fetchedUser.getMeals()));
         MealTestData.MATCHER.assertCollectionEquals(MealTestData.USER_MEALS, fetchedUser.getMeals());
 
@@ -28,7 +28,7 @@ public class DataJpaUserServiceTest extends UserServiceTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void testGetEagerlyNotFound() throws Exception {
-        service.getEagerly(99);
+    public void testGetWithMealsNotFound() throws Exception {
+        service.getWithMeals(99);
     }
 }

@@ -15,7 +15,7 @@ import java.util.Collection;
 public interface UserMealService {
     UserMeal get(int id, int userId) throws NotFoundException;
 
-    UserMeal getEagerly(int mealId) throws NotFoundException;
+    UserMeal getWithUser(int mealId, int userId) throws NotFoundException;
 
     void delete(int id, int userId) throws NotFoundException;
 

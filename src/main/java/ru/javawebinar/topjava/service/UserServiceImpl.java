@@ -37,8 +37,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getEagerly(int userId) {
-        return ExceptionUtil.check(repository.getEagerly(userId), "user", "id=" + userId);
+    public User getWithMeals(int userId) {
+        return ExceptionUtil.check(repository.getWithMeals(userId), "user", "id=" + userId);
     }
 
     public User getByEmail(String email) throws NotFoundException {
