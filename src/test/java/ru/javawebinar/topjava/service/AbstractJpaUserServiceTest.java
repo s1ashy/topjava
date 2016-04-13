@@ -5,6 +5,7 @@ import ru.javawebinar.topjava.repository.JpaUtil;
 
 abstract public class AbstractJpaUserServiceTest extends AbstractUserServiceTest {
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     protected JpaUtil jpaUtil;
 

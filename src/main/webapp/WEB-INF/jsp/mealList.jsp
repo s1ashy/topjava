@@ -8,8 +8,8 @@
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
     <h2><a href="<c:url value="/"/>"><fmt:message key="app.home"/></a></h2>
-    <h3><fmt:message key="meals.list"/> </h3>
-    <form method="post" action="meals?action=filter">
+    <h3><fmt:message key="meals.list"/></h3>
+    <form method="post" action="meals/filter">
         <dl>
             <dt><fmt:message key="meals.fromDate"/></dt>
             <dd><input type="date" name="startDate" value="${startDate}"></dd>
@@ -26,16 +26,22 @@
             <dt><fmt:message key="meals.toTime"/></dt>
             <dd><input type="time" name="endTime" value="${endTime}"></dd>
         </dl>
-        <button type="submit"><fmt:message key="meals.filter"/></button>
+        <span>
+            <button type="submit"><fmt:message key="meals.filter"/></button>
+            <c:if test="${filterEnabled}">
+                <fmt:message key="app.filterIsApplied"/> (<a href="meals/reset-filter"><fmt:message
+                        key="app.disable"/>)</a>
+            </c:if>
+        </span>
     </form>
     <hr>
-    <a href="meals?action=create"><fmt:message key="meals.add"/></a>
+    <a href="<c:url value="meals/new"/>"><fmt:message key="meals.add"/></a>
     <hr>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
             <th><fmt:message key="app.date"/></th>
-            <th><fmt:message key="meals.description"/> </th>
+            <th><fmt:message key="meals.description"/></th>
             <th><fmt:message key="meals.calories"/></th>
             <th></th>
             <th></th>
@@ -46,15 +52,16 @@
             <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
                 <td>
                         <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
-                        <%=TimeUtil.toString(meal.getDateTime())%>
+                    <%=TimeUtil.toString(meal.getDateTime())%>
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="meals?action=update&id=${meal.id}"><fmt:message key="app.update"/></a></td>
-                <td><a href="meals?action=delete&id=${meal.id}"><fmt:message key="app.delete"/></a></td>
+                <td><a href="meals/update/${meal.id}"><fmt:message key="app.update"/></a></td>
+                <td><a href="meals/delete/${meal.id}"><fmt:message key="app.delete"/></a></td>
             </tr>
         </c:forEach>
     </table>
 </section>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

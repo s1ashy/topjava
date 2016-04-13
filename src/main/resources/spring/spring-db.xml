@@ -16,6 +16,7 @@
     <!-- Change DB by comment/uncomment property-placeholder -->
 
     <jdbc:initialize-database data-source="dataSource" enabled="${database.init}">
+        <!--suppress SpringModelInspection -->
         <jdbc:script location="classpath:db/${jdbc.initLocation}"/>
         <jdbc:script encoding="utf-8" location="classpath:db/populateDB.sql"/>
     </jdbc:initialize-database>
@@ -101,6 +102,7 @@
 
     <beans profile="jpa">
         <context:component-scan base-package="ru.javawebinar.**.repository.jpa"/>
+        <tx:annotation-driven/>
     </beans>
 
     <beans profile="datajpa">
