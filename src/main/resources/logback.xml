@@ -29,6 +29,8 @@
     <!--log hibernate showSql-->
     <logger name="org.hibernate.SQL" level="debug"/>
 
+    <logger name="org.springframework.web" level="debug"/>
+
     <root level="info">
         <appender-ref ref="file"/>
         <appender-ref ref="console"/>
