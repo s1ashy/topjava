@@ -5,7 +5,7 @@
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <link rel="stylesheet" href="webjars/datatables/1.10.11/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="webjars/datetimepicker/2.5.1/jquery.datetimepicker.css">
+<link rel="stylesheet" href="webjars/datetimepicker/2.4.5/jquery.datetimepicker.css">
 
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
@@ -32,17 +32,17 @@
                     </thead>
                     <c:forEach items="${userList}" var="user">
                         <jsp:useBean id="user" scope="page" type="ru.javawebinar.topjava.model.User"/>
-                        <tr>
+                        <tr id="${user.id}">
                             <td><c:out value="${user.name}"/></td>
                             <td><a href="mailto:${user.email}">${user.email}</a></td>
                             <td>${user.roles}</td>
                             <td>
                                 <input type="checkbox"
-                                       <c:if test="${user.enabled}">checked</c:if> id="${user.id}"/>
+                                       <c:if test="${user.enabled}">checked</c:if>/>
                             </td>
                             <td><fmt:formatDate value="${user.registered}" pattern="dd-MMMM-yyyy"/></td>
-                            <td><a class="btn btn-xs btn-primary edit" id="${user.id}">Edit</a></td>
-                            <td><a class="btn btn-xs btn-danger delete" id="${user.id}">Delete</a></td>
+                            <td><a class="btn btn-xs btn-primary edit" id="edit">Edit</a></td>
+                            <td><a class="btn btn-xs btn-danger delete" id="delete">Delete</a></td>
                         </tr>
                     </c:forEach>
                 </table>
@@ -100,46 +100,47 @@
 </body>
 <script type="text/javascript" src="webjars/jquery/2.2.3/jquery.min.js"></script>
 <script type="text/javascript" src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="webjars/datetimepicker/2.5.1/jquery.datetimepicker.js"></script>
+<script type="text/javascript" src="webjars/datetimepicker/2.4.5/jquery.datetimepicker.js"></script>
 <script type="text/javascript" src="webjars/datatables/1.10.11/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="webjars/noty/2.3.8/js/noty/packaged/jquery.noty.packaged.min.js"></script>
 <script type="text/javascript" src="resources/js/datatablesUtil.js"></script>
+<script type="text/javascript" src="resources/js/usersUtil.js"></script>
 <script type="text/javascript">
 
-    var ajaxUrl = 'ajax/admin/users/';
+    var ajaxUrl = 'ajax/admin/users';
     var datatableApi;
 
     // $(document).ready(function () {
     $(function () {
-        datatableApi = $('#datatable').dataTable({
-            "bPaginate": false,
-            "bInfo": false,
-            "aoColumns": [
+        datatableApi = $('#datatable').DataTable({
+            "paginate": false,
+            "info": false,
+            "columns": [
                 {
-                    "mData": "name"
+                    "data": "name"
                 },
                 {
-                    "mData": "email"
+                    "data": "email"
                 },
                 {
-                    "mData": "roles"
+                    "data": "roles"
                 },
                 {
-                    "mData": "enabled"
+                    "data": "enabled"
                 },
                 {
-                    "mData": "registered"
+                    "data": "registered"
                 },
                 {
-                    "sDefaultContent": "",
-                    "bSortable": false
+                    "defaultContent": "",
+                    "sortable": false
                 },
                 {
-                    "sDefaultContent": "",
-                    "bSortable": false
+                    "defaultContent": "",
+                    "sortable": false
                 }
             ],
-            "aaSorting": [
+            "sorting": [
                 [
                     0,
                     "asc"
@@ -147,6 +148,7 @@
             ]
         });
         makeEditable();
+        enableUserCheckBoxListener();
     });
 </script>
 </html>

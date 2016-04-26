@@ -5,7 +5,7 @@ function makeEditable() {
     });
 
     $('.delete').click(function () {
-        deleteRow($(this).attr("id"));
+        deleteRow($(this).closest("tr").attr("id"));
     });
 
     $('#detailsForm').submit(function () {
@@ -20,7 +20,7 @@ function makeEditable() {
 
 function deleteRow(id) {
     $.ajax({
-        url: ajaxUrl + id,
+        url: ajaxUrl + "/" + id,
         type: 'DELETE',
         success: function () {
             updateTable();
@@ -30,18 +30,15 @@ function deleteRow(id) {
 }
 
 function updateTable() {
-    $.get(ajaxUrl, function (data) {
-        datatableApi.fnClearTable();
-        $.each(data, function (key, item) {
-            datatableApi.fnAddData(item);
-        });
-        datatableApi.fnDraw();
+    $.get(ajaxUrl + "?keepFilter=true", function (data) {
+        datatableApi.clear()
+            .rows.add(data)
+            .draw();
     });
 }
 
 function save() {
     var form = $('#detailsForm');
-    debugger;
     $.ajax({
         type: "POST",
         url: ajaxUrl,
@@ -79,5 +76,22 @@ function failNoty(event, jqXHR, options, jsExc) {
         text: 'Failed: ' + jqXHR.statusText + "<br>",
         type: 'error',
         layout: 'bottomRight'
+    });
+}
+
+function makeFilterable(filterForm) {
+    filterForm.submit(function () {
+        var input = filterForm.find('input').filter(function() {
+            // filtering out empty values
+            return this.value;
+        });
+        var filterParams = input.serialize();
+        var url = ajaxUrl + "?" + filterParams;
+        $.get(url, function (data) {
+            datatableApi.clear()
+                .rows.add(data)
+                .draw();
+        });
+        return false;
     });
 }

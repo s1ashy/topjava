@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.util.TimeUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -22,7 +23,8 @@ import java.util.Objects;
 public class JspUserMealController extends AbstractUserMealController {
 
     @RequestMapping(method = RequestMethod.GET)
-    public String mealList(Model model) {
+    public String mealList(Model model, HttpSession session) {
+        session.invalidate();
         model.addAttribute("mealList", super.getAll());
         return "mealList";
     }
