@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
+import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.UserMealsUtil;
 import ru.javawebinar.topjava.util.exception.ExceptionUtil;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -16,6 +19,7 @@ import java.util.Collection;
 @Service
 public class UserMealServiceImpl implements UserMealService {
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private UserMealRepository repository;
 
@@ -42,6 +46,12 @@ public class UserMealServiceImpl implements UserMealService {
     @Override
     public UserMeal update(UserMeal meal, int userId) {
         return ExceptionUtil.check(repository.save(meal, userId), meal.getId());
+    }
+
+    @Override
+    public void update(MealTo mealTo, int userId) throws NotFoundException {
+        UserMeal meal = get(mealTo.getId(), userId);
+        ExceptionUtil.check(repository.save(UserMealsUtil.updateFromTo(meal, mealTo), userId), mealTo.getId());
     }
 
     @Override
